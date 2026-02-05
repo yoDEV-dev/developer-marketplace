@@ -1,33 +1,126 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-const techStacks = ["React", "Node.js", "Python", "TypeScript", "AWS", "Flutter", "PostgreSQL", "Go"];
-const availabilityOptions = [
-  { value: "available", label: "Available Now", badge: "Immediate" },
-  { value: "limited", label: "Limited Availability" },
-  { value: "booked", label: "Currently Booked" },
+const techStacks = [
+  "React",
+  "Node.js",
+  "Python",
+  "TypeScript",
+  "AWS",
+  "Flutter",
+  "PostgreSQL",
+  "Go",
 ];
 
 export function FilterSidebar() {
-  const [selectedTech, setSelectedTech] = useState<string[]>(["React"]);
-  const [selectedAvailability, setSelectedAvailability] = useState("available");
-  const [rateRange, setRateRange] = useState([35, 120]);
-  const [verifiedOnly, setVerifiedOnly] = useState(true);
-  const [hasPortfolio, setHasPortfolio] = useState(false);
+  const t = useTranslations("filters");
+  const tCommon = useTranslations("common");
+  const tAvail = useTranslations("availability");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const availabilityOptions = [
+    {
+      value: "available",
+      labelKey: "available" as const,
+      badge: t("immediate"),
+    },
+    { value: "limited", labelKey: "limited" as const },
+    { value: "booked", labelKey: "booked" as const },
+  ];
+
+  // Initialize state from URL params
+  const [selectedTech, setSelectedTech] = useState<string[]>(
+    searchParams.get("tech")?.split(",").filter(Boolean) || [],
+  );
+  const [selectedAvailability, setSelectedAvailability] = useState(
+    searchParams.get("availability") || "",
+  );
+  const [rateRange, setRateRange] = useState([
+    Number(searchParams.get("rate_min")) || 10,
+    Number(searchParams.get("rate_max")) || 150,
+  ]);
+  const [verifiedOnly, setVerifiedOnly] = useState(
+    searchParams.get("verified") === "true",
+  );
+  const [hasPortfolio, setHasPortfolio] = useState(
+    searchParams.get("has_portfolio") === "true",
+  );
+
+  const updateUrl = useCallback(
+    (updates: Record<string, string | undefined>) => {
+      const params = new URLSearchParams(searchParams.toString());
+      for (const [key, value] of Object.entries(updates)) {
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+      }
+      // Reset offset when filters change
+      params.delete("offset");
+      router.push(`?${params.toString()}`);
+    },
+    [router, searchParams],
+  );
 
   const toggleTech = (tech: string) => {
-    setSelectedTech((prev) =>
-      prev.includes(tech) ? prev.filter((t) => t !== tech) : [...prev, tech]
-    );
+    const next = selectedTech.includes(tech)
+      ? selectedTech.filter((t) => t !== tech)
+      : [...selectedTech, tech];
+    setSelectedTech(next);
+    updateUrl({ tech: next.length > 0 ? next.join(",") : undefined });
+  };
+
+  const handleAvailabilityChange = (value: string) => {
+    const next = selectedAvailability === value ? "" : value;
+    setSelectedAvailability(next);
+    updateUrl({ availability: next || undefined });
+  };
+
+  const handleRateChange = (index: number, value: number) => {
+    const next = [...rateRange];
+    next[index] = value;
+    setRateRange(next);
+    updateUrl({
+      rate_min: next[0] > 10 ? String(next[0]) : undefined,
+      rate_max: next[1] < 150 ? String(next[1]) : undefined,
+    });
+  };
+
+  const handleVerifiedToggle = () => {
+    const next = !verifiedOnly;
+    setVerifiedOnly(next);
+    updateUrl({ verified: next ? "true" : undefined });
+  };
+
+  const handlePortfolioToggle = () => {
+    const next = !hasPortfolio;
+    setHasPortfolio(next);
+    updateUrl({ has_portfolio: next ? "true" : undefined });
+  };
+
+  const clearAll = () => {
+    setSelectedTech([]);
+    setSelectedAvailability("");
+    setRateRange([10, 150]);
+    setVerifiedOnly(false);
+    setHasPortfolio(false);
+    router.push("?");
   };
 
   return (
     <aside className="hidden lg:block w-72 shrink-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto border-r border-border bg-surface p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-bold text-foreground">Filters</h2>
-        <button className="text-primary text-sm font-semibold hover:underline">
-          Clear all
+        <h2 className="text-lg font-bold text-foreground">{t("title")}</h2>
+        <button
+          onClick={clearAll}
+          className="text-primary text-sm font-semibold hover:underline"
+        >
+          {tCommon("clearAll")}
         </button>
       </div>
 
@@ -40,7 +133,14 @@ export function FilterSidebar() {
             </span>
             <input
               type="text"
-              placeholder="Search keywords..."
+              defaultValue={searchParams.get("q") || ""}
+              placeholder={`${tCommon("search")}...`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const value = (e.target as HTMLInputElement).value;
+                  updateUrl({ q: value || undefined });
+                }
+              }}
               className="w-full h-12 pl-10 pr-4 rounded-xl bg-background-alt border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
@@ -50,7 +150,7 @@ export function FilterSidebar() {
       {/* Tech Stack */}
       <div className="mb-6">
         <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-3">
-          Tech Stack
+          {t("techStack")}
         </h3>
         <div className="flex flex-wrap gap-2">
           {techStacks.map((tech) => {
@@ -75,12 +175,13 @@ export function FilterSidebar() {
       {/* Availability */}
       <div className="mb-6">
         <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-4">
-          Availability
+          {t("availability")}
         </h3>
         <div className="space-y-3">
           {availabilityOptions.map((option) => (
             <label
               key={option.value}
+              onClick={() => handleAvailabilityChange(option.value)}
               className="flex items-center justify-between cursor-pointer group"
             >
               <div className="flex items-center gap-3">
@@ -95,21 +196,15 @@ export function FilterSidebar() {
                     <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                   )}
                 </div>
-                <span className="text-foreground font-medium">{option.label}</span>
+                <span className="text-foreground font-medium">
+                  {tAvail(option.labelKey)}
+                </span>
               </div>
               {option.badge && (
                 <span className="text-xs font-bold text-success bg-success/10 px-2 py-1 rounded">
                   {option.badge}
                 </span>
               )}
-              <input
-                type="radio"
-                name="availability"
-                value={option.value}
-                checked={selectedAvailability === option.value}
-                onChange={(e) => setSelectedAvailability(e.target.value)}
-                className="sr-only"
-              />
             </label>
           ))}
         </div>
@@ -119,7 +214,7 @@ export function FilterSidebar() {
       <div className="mb-6">
         <div className="flex justify-between items-end mb-4">
           <h3 className="text-xs font-bold text-muted uppercase tracking-wider">
-            Hourly Rate (USD)
+            {t("hourlyRate")}
           </h3>
           <span className="text-sm font-bold text-primary">
             ${rateRange[0]} - ${rateRange[1]}+
@@ -139,7 +234,7 @@ export function FilterSidebar() {
             min="10"
             max="150"
             value={rateRange[0]}
-            onChange={(e) => setRateRange([parseInt(e.target.value), rateRange[1]])}
+            onChange={(e) => handleRateChange(0, parseInt(e.target.value))}
             className="absolute w-full h-6 opacity-0 cursor-pointer"
           />
         </div>
@@ -152,21 +247,34 @@ export function FilterSidebar() {
       {/* Experience Level */}
       <div className="mb-6">
         <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-3">
-          Experience Level
+          {t("experienceLevel")}
         </h3>
         <div className="grid grid-cols-4 gap-2">
-          {["1-2y", "3-5y", "5-8y", "8y+"].map((exp, i) => (
-            <button
-              key={exp}
-              className={`h-10 rounded-lg text-xs font-bold transition-colors ${
-                i === 1
-                  ? "bg-primary text-white"
-                  : "bg-background-alt text-foreground hover:bg-border"
-              }`}
-            >
-              {exp}
-            </button>
-          ))}
+          {[
+            { label: "1-2y", value: "1-3" },
+            { label: "3-5y", value: "3-5" },
+            { label: "5-8y", value: "5-10" },
+            { label: "8y+", value: "10-15" },
+          ].map((exp) => {
+            const isSelected = searchParams.get("experience") === exp.value;
+            return (
+              <button
+                key={exp.value}
+                onClick={() =>
+                  updateUrl({
+                    experience: isSelected ? undefined : exp.value,
+                  })
+                }
+                className={`h-10 rounded-lg text-xs font-bold transition-colors ${
+                  isSelected
+                    ? "bg-primary text-white"
+                    : "bg-background-alt text-foreground hover:bg-border"
+                }`}
+              >
+                {exp.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -174,11 +282,15 @@ export function FilterSidebar() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined fill text-primary">verified</span>
-            <span className="font-medium text-foreground">Verified only</span>
+            <span className="material-symbols-outlined fill text-primary">
+              verified
+            </span>
+            <span className="font-medium text-foreground">
+              {t("verifiedOnly")}
+            </span>
           </div>
           <button
-            onClick={() => setVerifiedOnly(!verifiedOnly)}
+            onClick={handleVerifiedToggle}
             className={`w-11 h-6 rounded-full relative transition-colors ${
               verifiedOnly ? "bg-primary" : "bg-border"
             }`}
@@ -193,11 +305,15 @@ export function FilterSidebar() {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-muted">folder_special</span>
-            <span className="font-medium text-foreground">Has portfolio</span>
+            <span className="material-symbols-outlined text-muted">
+              folder_special
+            </span>
+            <span className="font-medium text-foreground">
+              {t("hasPortfolio")}
+            </span>
           </div>
           <button
-            onClick={() => setHasPortfolio(!hasPortfolio)}
+            onClick={handlePortfolioToggle}
             className={`w-11 h-6 rounded-full relative transition-colors ${
               hasPortfolio ? "bg-primary" : "bg-border"
             }`}
@@ -214,7 +330,7 @@ export function FilterSidebar() {
       {/* Apply Button (Mobile) */}
       <div className="mt-8 lg:hidden">
         <button className="w-full h-14 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-2">
-          Apply Filters
+          {t("applyFilters")}
           <span className="material-symbols-outlined">arrow_forward</span>
         </button>
       </div>

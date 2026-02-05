@@ -500,6 +500,45 @@ CREATE TABLE profile_reports (
 
 
 -- ============================================================
+-- MESSAGING / CONVERSATIONS
+-- ============================================================
+
+CREATE TABLE conversations (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    inquiry_id      UUID REFERENCES inquiries(id),           -- Optional link to inquiry
+    subject         VARCHAR(200),
+    created_at      TIMESTAMPTZ DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE conversation_participants (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+    user_id         UUID NOT NULL,                           -- developer_profiles.id or client user_id
+    display_name    VARCHAR(100) NOT NULL,
+    avatar_url      VARCHAR(500),
+    last_read_at    TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(conversation_id, user_id)
+);
+
+CREATE TABLE messages (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+    sender_id       UUID NOT NULL,                           -- user_id of the sender
+    body            TEXT NOT NULL,
+    is_system       BOOLEAN DEFAULT FALSE,                   -- System-generated messages
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_messages_conversation ON messages(conversation_id, created_at);
+CREATE INDEX idx_conv_participants_user ON conversation_participants(user_id);
+
+CREATE TRIGGER trg_conversation_updated
+    BEFORE UPDATE ON conversations
+    FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+
+
+-- ============================================================
 -- HELPER FUNCTION: Update profile completion percentage
 -- ============================================================
 

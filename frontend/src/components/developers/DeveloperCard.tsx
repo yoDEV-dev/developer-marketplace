@@ -1,7 +1,12 @@
+"use client";
+
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { toggleBookmark } from "@/actions/bookmarks";
 
-interface DeveloperCardProps {
+export interface DeveloperCardProps {
   id: string;
   name: string;
   headline: string;
@@ -16,30 +21,30 @@ interface DeveloperCardProps {
   isFavorite?: boolean;
 }
 
-const availabilityConfig = {
+const availabilityStyles = {
   available: {
-    label: "Available Now",
+    key: "available" as const,
     bgColor: "bg-accent/10",
     textColor: "text-accent",
     dotColor: "bg-accent",
     animate: true,
   },
   limited: {
-    label: "Limited Availability",
+    key: "limited" as const,
     bgColor: "bg-warning/10",
     textColor: "text-warning",
     dotColor: "bg-warning",
     animate: false,
   },
   booked: {
-    label: "Currently Booked",
+    key: "booked" as const,
     bgColor: "bg-muted/10",
     textColor: "text-muted",
     dotColor: "bg-muted",
     animate: false,
   },
   not_taking_work: {
-    label: "Not Taking Work",
+    key: "notTakingWork" as const,
     bgColor: "bg-muted/10",
     textColor: "text-muted",
     dotColor: "bg-muted",
@@ -61,9 +66,27 @@ export function DeveloperCard({
   skills,
   isFavorite = false,
 }: DeveloperCardProps) {
-  const availConfig = availabilityConfig[availability];
+  const locale = useLocale();
+  const t = useTranslations("availability");
+  const tDev = useTranslations("developers");
+  const tProfile = useTranslations("profile");
+  const [favorited, setFavorited] = useState(isFavorite);
+  const [pending, startTransition] = useTransition();
+  const availConfig = availabilityStyles[availability];
   const displayedSkills = skills.slice(0, 3);
   const remainingSkills = skills.length - 3;
+
+  function handleToggleBookmark(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavorited((prev) => !prev); // Optimistic update
+    startTransition(async () => {
+      const result = await toggleBookmark(id);
+      if (result.success && result.bookmarked !== undefined) {
+        setFavorited(result.bookmarked);
+      }
+    });
+  }
 
   return (
     <div className="flex flex-col bg-surface rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-shadow">
@@ -98,8 +121,12 @@ export function DeveloperCard({
               <h3 className="text-foreground text-lg font-bold leading-tight">
                 {name} {countryFlag}
               </h3>
-              <button className="text-muted hover:text-error transition-colors">
-                <span className={`material-symbols-outlined ${isFavorite ? "fill text-error" : ""}`}>
+              <button
+                onClick={handleToggleBookmark}
+                disabled={pending}
+                className="text-muted hover:text-error transition-colors disabled:opacity-50"
+              >
+                <span className={`material-symbols-outlined ${favorited ? "fill text-error" : ""}`}>
                   favorite
                 </span>
               </button>
@@ -110,7 +137,7 @@ export function DeveloperCard({
                 <span className="material-symbols-outlined fill text-sm">star</span>
                 <span className="text-xs font-bold ml-1">{rating.toFixed(1)}</span>
               </div>
-              <span className="text-muted text-xs">({reviewCount} reviews)</span>
+              <span className="text-muted text-xs">({tProfile("reviews_count", { count: reviewCount })})</span>
             </div>
           </div>
         </div>
@@ -125,7 +152,7 @@ export function DeveloperCard({
             }`}
           />
           <span className="text-[11px] font-bold uppercase tracking-wide">
-            {availConfig.label}
+            {t(availConfig.key)}
           </span>
         </div>
 
@@ -158,18 +185,18 @@ export function DeveloperCard({
                   ${hourlyRateMin} - ${hourlyRateMax}
                 </p>
                 <p className="text-muted text-[10px] font-medium uppercase tracking-tight">
-                  Hourly Rate Range
+                  {tDev("hourlyRateRange")}
                 </p>
               </>
             ) : (
-              <p className="text-muted text-sm">Project-based pricing</p>
+              <p className="text-muted text-sm">{tDev("projectBased")}</p>
             )}
           </div>
           <Link
-            href={`/developers/${id}`}
+            href={`/${locale}/developers/${id}`}
             className="flex items-center justify-center min-w-[120px] h-10 px-4 bg-primary text-white text-sm font-bold rounded-full shadow-md hover:bg-primary-dark transition-colors"
           >
-            View Profile
+            {tDev("viewProfile")}
           </Link>
         </div>
       </div>

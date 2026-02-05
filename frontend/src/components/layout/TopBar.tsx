@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 interface TopBarProps {
   title?: string;
   showSearch?: boolean;
 }
 
-export function TopBar({ title = "yoDEV Directory", showSearch = true }: TopBarProps) {
+export function TopBar({ title, showSearch = true }: TopBarProps) {
+  const t = useTranslations("developers");
+  const locale = useLocale();
+  const displayTitle = title || t("directory");
+
   return (
     <header className="sticky top-0 z-30 bg-surface/80 backdrop-blur-md border-b border-border">
       <div className="flex items-center justify-between px-4 lg:px-6 h-16">
@@ -16,7 +22,7 @@ export function TopBar({ title = "yoDEV Directory", showSearch = true }: TopBarP
           <button className="flex items-center justify-center w-10 h-10 rounded-full bg-background-alt text-primary">
             <span className="material-symbols-outlined">menu</span>
           </button>
-          <h1 className="text-lg font-bold text-foreground">{title}</h1>
+          <h1 className="text-lg font-bold text-foreground">{displayTitle}</h1>
         </div>
 
         {/* Desktop: Search Bar */}
@@ -28,7 +34,7 @@ export function TopBar({ title = "yoDEV Directory", showSearch = true }: TopBarP
               </span>
               <input
                 type="text"
-                placeholder="Search developers by name, skill, or keyword..."
+                placeholder={t("searchPlaceholderLong")}
                 className="w-full h-12 pl-12 pr-4 rounded-xl bg-background-alt border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
@@ -37,12 +43,13 @@ export function TopBar({ title = "yoDEV Directory", showSearch = true }: TopBarP
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          <LanguageSelector />
           <button className="relative flex items-center justify-center w-10 h-10 rounded-full bg-background-alt text-muted hover:text-foreground transition-colors">
             <span className="material-symbols-outlined">notifications</span>
             <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full" />
           </button>
           <Link
-            href="/profile"
+            href={`/${locale}/profile`}
             className="hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-primary/20"
           >
             <span className="material-symbols-outlined text-primary">person</span>
@@ -60,7 +67,7 @@ export function TopBar({ title = "yoDEV Directory", showSearch = true }: TopBarP
               </span>
               <input
                 type="text"
-                placeholder="Search by name, skill, or role..."
+                placeholder={t("searchPlaceholder")}
                 className="w-full h-12 pl-12 pr-4 rounded-full bg-background-alt border-none text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>

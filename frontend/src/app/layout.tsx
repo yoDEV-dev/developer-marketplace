@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -8,19 +7,13 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export const metadata: Metadata = {
-  title: "yoDEV Developer Marketplace",
-  description: "Connect with top Latin American developers for your next project",
-  keywords: ["developers", "freelance", "latin america", "react", "node.js", "marketplace"],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html className={inter.variable} suppressHydrationWarning>
       <head>
         {/* Material Symbols */}
         <link
