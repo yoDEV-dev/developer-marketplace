@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* ===========================================
+   yoDEV Developer Marketplace - Design System
+   =========================================== */
+
+:root {
+  /* Brand Colors */
+  --primary: #6c47c2;
+  --primary-light: #8b6dd4;
+  --primary-dark: #5435a1;
+  --accent-teal: #14b8a6;
+  --accent-teal-light: #2dd4bf;
+
+  /* Background Colors */
+  --background: #f7f6f8;
+  --background-alt: #ffffff;
+  --surface: #ffffff;
+
+  /* Text Colors */
+  --foreground: #141216;
+  --foreground-muted: #716a81;
+  --foreground-subtle: #a7a2b3;
+
+  /* Border Colors */
+  --border: #e5e5e5;
+  --border-light: #f0f0f0;
+
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #8b6dd4;
+    --primary-light: #a78bdf;
+    --primary-dark: #6c47c2;
+
+    --background: #17141e;
+    --background-alt: #1e1a26;
+    --surface: #25212e;
+
+    --foreground: #ffffff;
+    --foreground-muted: #a7a2b3;
+    --foreground-subtle: #716a81;
+
+    --border: #333040;
+    --border-light: #2a2635;
+  }
+}
+
+/* Tailwind v4 Theme Extension */
+@theme inline {
+  /* Colors */
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-accent: var(--accent-teal);
+  --color-accent-light: var(--accent-teal-light);
+
+  --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-surface: var(--surface);
+
+  --color-foreground: var(--foreground);
+  --color-muted: var(--foreground-muted);
+  --color-subtle: var(--foreground-subtle);
+
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", monospace;
+
+  /* Border Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-primary: 0 4px 14px -3px rgb(108 71 194 / 0.3);
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Material Symbols Configuration */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar for desktop */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--border-light);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--foreground-muted);
+  }
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--primary);
+  color: white;
+}
