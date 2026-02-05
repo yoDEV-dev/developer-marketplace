@@ -1,0 +1,165 @@
+<!-- Log Hours Interface -->
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>yoDEV - Log Hours</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6c47c2",
+                        "accent-teal": "#14B8A6",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#17141e",
+                        "surface-dark": "#201e24",
+                        "border-dark": "#45404f"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            min-height: max(884px, 100dvh);
+        }
+        .ios-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white min-h-screen flex justify-center">
+    <div class="relative w-full max-w-[430px] h-screen bg-background-light dark:bg-background-dark flex flex-col overflow-hidden shadow-2xl">
+        <!-- TopAppBar -->
+        <header class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-200 dark:border-border-dark">
+            <button class="text-gray-900 dark:text-white flex size-10 shrink-0 items-center justify-center hover:bg-gray-200 dark:hover:bg-white/10 rounded-full transition-colors">
+                <span class="material-symbols-outlined">arrow_back_ios</span>
+            </button>
+            <h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Log Hours</h2>
+        </header>
+
+        <main class="flex-1 overflow-y-auto pb-32">
+            <!-- Project Selector Section -->
+            <div class="p-4">
+                <label class="flex flex-col w-full">
+                    <p class="text-gray-700 dark:text-[#a7a2b3] text-sm font-semibold leading-normal pb-2 uppercase tracking-wider">Select Project</p>
+                    <select class="form-input flex w-full rounded-lg text-gray-900 dark:text-white border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark focus:ring-2 focus:ring-primary h-14 p-[15px] text-base font-normal transition-all">
+                        <option value="one">E-commerce API Integration</option>
+                        <option value="two">Web3 Marketplace Frontend</option>
+                        <option value="three">Internal Admin Dashboard</option>
+                        <option value="four">Mobile Auth Refactor</option>
+                    </select>
+                </label>
+            </div>
+
+            <!-- Active Tracking Section -->
+            <div class="px-4 py-2">
+                <h4 class="text-[#a7a2b3] text-xs font-bold leading-normal tracking-[0.1em] py-2 text-center uppercase">Active Tracking</h4>
+                <!-- Timer Display -->
+                <div class="flex gap-4 py-6 px-2">
+                    <div class="flex grow basis-0 flex-col items-center gap-2">
+                        <div class="flex h-16 w-full items-center justify-center rounded-xl bg-gray-200 dark:bg-[#2f2c35] border border-gray-300 dark:border-border-dark">
+                            <p class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-tight">02</p>
+                        </div>
+                        <p class="text-gray-500 dark:text-[#a7a2b3] text-xs font-medium uppercase">Hours</p>
+                    </div>
+                    <div class="flex grow basis-0 flex-col items-center gap-2">
+                        <div class="flex h-16 w-full items-center justify-center rounded-xl bg-gray-200 dark:bg-[#2f2c35] border border-gray-300 dark:border-border-dark">
+                            <p class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-tight">14</p>
+                        </div>
+                        <p class="text-gray-500 dark:text-[#a7a2b3] text-xs font-medium uppercase">Minutes</p>
+                    </div>
+                    <div class="flex grow basis-0 flex-col items-center gap-2">
+                        <div class="flex h-16 w-full items-center justify-center rounded-xl bg-gray-200 dark:bg-[#2f2c35] border border-gray-300 dark:border-border-dark">
+                            <p class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-tight">56</p>
+                        </div>
+                        <p class="text-gray-500 dark:text-[#a7a2b3] text-xs font-medium uppercase">Seconds</p>
+                    </div>
+                </div>
+                <!-- Timer Control -->
+                <div class="flex px-4 py-3 justify-center">
+                    <button class="flex min-w-[180px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 bg-accent-teal text-white gap-3 shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                        <span class="material-symbols-outlined">pause_circle</span>
+                        <span class="text-base font-bold leading-normal tracking-wide">Stop Timer</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Manual Entry Section -->
+            <div class="px-4 mt-6">
+                <div class="border-t border-gray-200 dark:border-border-dark pt-6 mb-4">
+                    <h4 class="text-gray-900 dark:text-white text-md font-bold mb-4">Manual Entry</h4>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <label class="flex flex-col gap-2">
+                        <span class="text-gray-700 dark:text-[#a7a2b3] text-sm font-medium">Date</span>
+                        <div class="relative">
+                            <input class="form-input w-full rounded-lg bg-white dark:bg-surface-dark border-gray-300 dark:border-border-dark text-gray-900 dark:text-white h-12 px-4 focus:ring-primary" type="date" value="2023-10-27"/>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-gray-700 dark:text-[#a7a2b3] text-sm font-medium">Duration (HH:MM)</span>
+                        <input class="form-input w-full rounded-lg bg-white dark:bg-surface-dark border-gray-300 dark:border-border-dark text-gray-900 dark:text-white h-12 px-4 focus:ring-primary" placeholder="08:00" type="text"/>
+                    </label>
+                </div>
+                <label class="flex flex-col gap-2">
+                    <span class="text-gray-700 dark:text-[#a7a2b3] text-sm font-medium">What did you work on?</span>
+                    <div class="rounded-lg border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark overflow-hidden focus-within:ring-2 focus-within:ring-primary transition-all">
+                        <div class="flex items-center gap-2 p-2 border-b border-gray-200 dark:border-border-dark bg-gray-50 dark:bg-white/5">
+                            <button class="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded"><span class="material-symbols-outlined text-sm">format_bold</span></button>
+                            <button class="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded"><span class="material-symbols-outlined text-sm">format_italic</span></button>
+                            <button class="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded"><span class="material-symbols-outlined text-sm">format_list_bulleted</span></button>
+                            <div class="h-4 w-[1px] bg-gray-300 dark:bg-border-dark mx-1"></div>
+                            <button class="p-1 hover:bg-gray-200 dark:hover:bg-white/10 rounded"><span class="material-symbols-outlined text-sm">link</span></button>
+                        </div>
+                        <textarea class="w-full min-h-[120px] bg-transparent border-none text-gray-900 dark:text-white p-4 focus:ring-0 resize-none placeholder:text-gray-400" placeholder="Implemented the new checkout flow and resolved state management bugs in the cart module..."></textarea>
+                    </div>
+                </label>
+            </div>
+        </main>
+
+        <!-- Summary & Fixed Bottom Actions -->
+        <footer class="absolute bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-200 dark:border-border-dark p-4 pb-8 backdrop-blur-md bg-opacity-90">
+            <div class="flex items-center justify-between mb-4 px-2">
+                <div class="flex flex-col">
+                    <p class="text-xs text-gray-500 dark:text-[#a7a2b3] font-medium uppercase tracking-tight">Total hours this week</p>
+                    <p class="text-sm font-bold text-gray-900 dark:text-white">32.5 <span class="text-gray-400">/ 40h</span></p>
+                </div>
+                <div class="w-24 h-2 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary rounded-full" style="width: 81%"></div>
+                </div>
+            </div>
+            <button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-white gap-2 shadow-xl shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all">
+                <span class="material-symbols-outlined">send</span>
+                <span class="text-base font-bold tracking-wide">Submit Log</span>
+            </button>
+        </footer>
+
+        <!-- iOS Indicator -->
+        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-gray-300 dark:bg-white/20 rounded-full"></div>
+    </div>
+</body>
+</html>

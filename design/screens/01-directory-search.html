@@ -1,0 +1,269 @@
+<!-- Developer Directory Search -->
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>yoDEV | Developer Directory</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6c47c2",
+                        "accent-teal": "#14B8A6",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#17141e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#141216] dark:text-white antialiased">
+    <div class="relative flex min-h-screen w-full flex-col max-w-[480px] mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden shadow-2xl">
+        <!-- Header / Navigation Bar -->
+        <header class="sticky top-0 z-30 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+            <div class="flex items-center px-4 pt-6 pb-2 justify-between">
+                <div class="text-primary flex size-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-[#25212e] shadow-sm">
+                    <span class="material-symbols-outlined">menu</span>
+                </div>
+                <h1 class="text-[#141216] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">yoDEV Directory</h1>
+                <div class="flex size-10 items-center justify-end relative">
+                    <button class="flex items-center justify-center rounded-full h-10 w-10 bg-white dark:bg-[#25212e] shadow-sm text-primary">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <span class="absolute top-2 right-1 h-2 w-2 bg-red-500 rounded-full border border-white"></span>
+                </div>
+            </div>
+            <!-- Search Bar Component -->
+            <div class="px-4 py-3">
+                <div class="flex gap-2">
+                    <label class="flex flex-col min-w-0 h-12 flex-1">
+                        <div class="flex w-full flex-1 items-stretch rounded-full h-full shadow-sm">
+                            <div class="text-[#716a81] flex border-none bg-white dark:bg-[#25212e] items-center justify-center pl-4 rounded-l-full">
+                                <span class="material-symbols-outlined text-primary">search</span>
+                            </div>
+                            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-full text-[#141216] dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-[#25212e] placeholder:text-[#716a81] px-4 pl-2 text-base font-normal leading-normal" placeholder="Search by name, skill, or role..."/>
+                        </div>
+                    </label>
+                    <button class="flex size-12 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+                        <span class="material-symbols-outlined">tune</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Filter Chips -->
+            <div class="flex gap-3 px-4 pb-4 overflow-x-auto no-scrollbar">
+                <button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-4 text-white shadow-md">
+                    <span class="text-sm font-semibold">All Roles</span>
+                </button>
+                <button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#25212e] px-4 text-[#141216] dark:text-gray-300 border border-gray-100 dark:border-gray-800">
+                    <span class="text-sm font-medium">Frontend</span>
+                </button>
+                <button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#25212e] px-4 text-[#141216] dark:text-gray-300 border border-gray-100 dark:border-gray-800">
+                    <span class="text-sm font-medium">Backend</span>
+                </button>
+                <button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#25212e] px-4 text-[#141216] dark:text-gray-300 border border-gray-100 dark:border-gray-800">
+                    <span class="text-sm font-medium">Mobile</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 px-4 pb-20">
+            <!-- Results Count -->
+            <div class="flex justify-between items-center py-4">
+                <p class="text-[#716a81] dark:text-gray-400 text-sm font-medium">Showing 47 developers</p>
+                <div class="flex items-center gap-1 text-primary text-xs font-bold uppercase tracking-wider">
+                    <span>Sort: Recommended</span>
+                    <span class="material-symbols-outlined text-sm">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Developer Feed -->
+            <div class="flex flex-col gap-5">
+                <!-- Card 1: Mateo Silva -->
+                <div class="flex flex-col items-stretch justify-start rounded-xl shadow-sm bg-white dark:bg-[#1e1a26] border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                    <div class="p-5 flex flex-col gap-4">
+                        <div class="flex gap-4">
+                            <!-- Avatar with availability indicator -->
+                            <div class="relative size-20 shrink-0">
+                                <div class="size-20 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="Mateo Silva smiling portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSOgbWwAuTDWb25MrU7wHwoO4SE9k7N4s2yGgz_3yvfjN9-db0NmXoRlEEVa1XurE94qohdKBAAGMcY5ymWnjBGQg5eaf-oM69O7aRR6FDMRFCbnzWTE4I5yxksO95GHG6IdK2zAhRKa9sxb4FL6Up12UYSMoY18JnA5csi_Txzp3eqstwNnxFyZQvtw92sQ_YaA6tybyyJicdTUL4W1E4fFHuKBmWYb4yGKQ4DVD39ObHl9Uk16SHxymxmIp7eEQRxRcZGuWsK5s");'></div>
+                                <div class="absolute bottom-1 right-1 size-4 bg-accent-teal rounded-full border-2 border-white dark:border-[#1e1a26]"></div>
+                            </div>
+                            <!-- Header Info -->
+                            <div class="flex flex-col flex-1 gap-1">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-[#141216] dark:text-white text-lg font-bold leading-tight">Mateo Silva</h3>
+                                    <span class="material-symbols-outlined text-gray-300">favorite</span>
+                                </div>
+                                <p class="text-primary text-sm font-semibold">Senior Full-Stack Engineer</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <div class="flex items-center text-accent-teal">
+                                        <span class="material-symbols-outlined fill-icon text-sm">star</span>
+                                        <span class="text-xs font-bold ml-1">5.0</span>
+                                    </div>
+                                    <span class="text-[#716a81] dark:text-gray-400 text-xs">(42 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Availability Badge -->
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-teal/10 text-accent-teal w-fit">
+                            <span class="size-2 rounded-full bg-accent-teal animate-pulse"></span>
+                            <span class="text-[11px] font-bold uppercase tracking-wide">Available Now</span>
+                        </div>
+                        <!-- Skill Tags -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">React Native</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Node.js</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">AWS</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">+4</span>
+                        </div>
+                        <!-- Divider -->
+                        <div class="h-px w-full bg-gray-50 dark:bg-gray-800"></div>
+                        <!-- Footer Actions -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <p class="text-[#141216] dark:text-white text-base font-bold">$45 - $70</p>
+                                <p class="text-[#716a81] dark:text-gray-400 text-[10px] font-medium uppercase tracking-tighter">Hourly Rate Range</p>
+                            </div>
+                            <button class="flex min-w-[120px] cursor-pointer items-center justify-center rounded-full h-10 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">
+                                <span>View Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Luciana Gomez -->
+                <div class="flex flex-col items-stretch justify-start rounded-xl shadow-sm bg-white dark:bg-[#1e1a26] border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                    <div class="p-5 flex flex-col gap-4">
+                        <div class="flex gap-4">
+                            <div class="relative size-20 shrink-0">
+                                <div class="size-20 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="Luciana Gomez professional portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC85Dhd6ubUE5cbbQHNAAINVUkSWnzZlVrjDoussWjM4L4u5lWBFOAAYhAyozPP6Sj6ZLpERLN197G2q0firIiaqGLCamMsdEXT2iqSvxdNPbFwM47dhGCuxgAHkrR5Z5cJFmIhGQ87U7IcetYyu0trPL-oqd1HXKaoTqmJ5uev0IYCPg5QA4nnIXxTssEg-LOwNZ7voHtUtdwyMgoO3TZfOKkcEy4cDFAvXIxiUFl8Ps8ZxxL5bhtu42O8pSuPKO2Ia_tPS4NM38c");'></div>
+                                <div class="absolute bottom-1 right-1 size-4 bg-yellow-400 rounded-full border-2 border-white dark:border-[#1e1a26]"></div>
+                            </div>
+                            <div class="flex flex-col flex-1 gap-1">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-[#141216] dark:text-white text-lg font-bold leading-tight">Luciana Gomez</h3>
+                                    <span class="material-symbols-outlined text-red-500 fill-icon">favorite</span>
+                                </div>
+                                <p class="text-primary text-sm font-semibold">UX/UI Specialist</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <div class="flex items-center text-accent-teal">
+                                        <span class="material-symbols-outlined fill-icon text-sm">star</span>
+                                        <span class="text-xs font-bold ml-1">4.9</span>
+                                    </div>
+                                    <span class="text-[#716a81] dark:text-gray-400 text-xs">(87 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-600 w-fit">
+                            <span class="size-2 rounded-full bg-yellow-400"></span>
+                            <span class="text-[11px] font-bold uppercase tracking-wide">Available in 1 week</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Figma</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Tailwind CSS</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Framer</span>
+                        </div>
+                        <div class="h-px w-full bg-gray-50 dark:bg-gray-800"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <p class="text-[#141216] dark:text-white text-base font-bold">$55 - $80</p>
+                                <p class="text-[#716a81] dark:text-gray-400 text-[10px] font-medium uppercase tracking-tighter">Hourly Rate Range</p>
+                            </div>
+                            <button class="flex min-w-[120px] cursor-pointer items-center justify-center rounded-full h-10 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">
+                                <span>View Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Diego Herrera -->
+                <div class="flex flex-col items-stretch justify-start rounded-xl shadow-sm bg-white dark:bg-[#1e1a26] border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                    <div class="p-5 flex flex-col gap-4">
+                        <div class="flex gap-4">
+                            <div class="relative size-20 shrink-0">
+                                <div class="size-20 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="Diego Herrera professional portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxBK8FOOHeOB781BxS9psgUpvN1KDNlSnAirkMIm4v1lvUnNTXT34CCBMG2GEZPkHDSMoIQMfiC7mpJFWH5flN0nymZn4EZNYfwLPatxBVr4SxXX2L80yoQH1Jwv4WCoG3O7IcpAVm8RFxmWF7f4C2N2IeMp8AqlXm5gYDVDi6ntv8ppEnD6Kkql6vxjvKQewltiSYEsYDwYbUilgwxizAVC7iOoNsixcKZ-vQ-_928A1RVQlNWbQxT0skUIzWjXTaxU1NIt6sqY4");'></div>
+                                <div class="absolute bottom-1 right-1 size-4 bg-accent-teal rounded-full border-2 border-white dark:border-[#1e1a26]"></div>
+                            </div>
+                            <div class="flex flex-col flex-1 gap-1">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-[#141216] dark:text-white text-lg font-bold leading-tight">Diego Herrera</h3>
+                                    <span class="material-symbols-outlined text-gray-300">favorite</span>
+                                </div>
+                                <p class="text-primary text-sm font-semibold">DevOps Architect</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <div class="flex items-center text-accent-teal">
+                                        <span class="material-symbols-outlined fill-icon text-sm">star</span>
+                                        <span class="text-xs font-bold ml-1">4.8</span>
+                                    </div>
+                                    <span class="text-[#716a81] dark:text-gray-400 text-xs">(31 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-teal/10 text-accent-teal w-fit">
+                            <span class="size-2 rounded-full bg-accent-teal"></span>
+                            <span class="text-[11px] font-bold uppercase tracking-wide">Available Now</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Kubernetes</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Terraform</span>
+                            <span class="px-2 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold">Go</span>
+                        </div>
+                        <div class="h-px w-full bg-gray-50 dark:bg-gray-800"></div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <p class="text-[#141216] dark:text-white text-base font-bold">$70 - $110</p>
+                                <p class="text-[#716a81] dark:text-gray-400 text-[10px] font-medium uppercase tracking-tighter">Hourly Rate Range</p>
+                            </div>
+                            <button class="flex min-w-[120px] cursor-pointer items-center justify-center rounded-full h-10 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20">
+                                <span>View Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Fixed Bottom Navigation (iOS Style) -->
+        <nav class="fixed bottom-0 w-full max-w-[480px] bg-white/90 dark:bg-[#1e1a26]/90 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 flex justify-around items-center py-2 pb-6 px-4 z-40">
+            <button class="flex flex-col items-center gap-1 text-primary">
+                <span class="material-symbols-outlined fill-icon">search</span>
+                <span class="text-[10px] font-bold">Browse</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-[#716a81] dark:text-gray-400">
+                <span class="material-symbols-outlined">work</span>
+                <span class="text-[10px] font-medium">Projects</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-[#716a81] dark:text-gray-400">
+                <span class="material-symbols-outlined">chat_bubble</span>
+                <span class="text-[10px] font-medium">Messages</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-[#716a81] dark:text-gray-400">
+                <span class="material-symbols-outlined">account_circle</span>
+                <span class="text-[10px] font-medium">Profile</span>
+            </button>
+        </nav>
+    </div>
+</body>
+</html>

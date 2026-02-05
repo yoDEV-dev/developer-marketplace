@@ -412,6 +412,63 @@ CREATE INDEX idx_stats_developer_date ON profile_stats_daily(developer_id, stat_
 
 
 -- ============================================================
+-- TIME TRACKING / HOURS LOGGING
+-- ============================================================
+
+CREATE TABLE time_entries (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    developer_id    UUID NOT NULL REFERENCES developer_profiles(id) ON DELETE CASCADE,
+    inquiry_id      UUID REFERENCES inquiries(id),           -- Optional link to engagement
+
+    -- Project context (manual if no inquiry linked)
+    project_name    VARCHAR(150),
+    client_name     VARCHAR(100),
+
+    -- Time details
+    entry_date      DATE NOT NULL,
+    hours           DECIMAL(5,2) NOT NULL,                   -- e.g. 2.5 hours
+    description     TEXT,                                     -- What was worked on
+
+    -- Billing info
+    hourly_rate     DECIMAL(10,2),                           -- Rate at time of entry
+    currency        VARCHAR(3) DEFAULT 'USD',
+    is_billable     BOOLEAN DEFAULT TRUE,
+    is_invoiced     BOOLEAN DEFAULT FALSE,
+
+    -- Timer tracking (for live timer feature)
+    timer_started_at TIMESTAMPTZ,                            -- When timer was started
+    timer_stopped_at TIMESTAMPTZ,                            -- When timer was stopped
+
+    -- Metadata
+    created_at      TIMESTAMPTZ DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_time_entries_developer ON time_entries(developer_id);
+CREATE INDEX idx_time_entries_date ON time_entries(developer_id, entry_date DESC);
+CREATE INDEX idx_time_entries_inquiry ON time_entries(inquiry_id);
+
+-- Weekly time summary view (for dashboard)
+CREATE TABLE time_summary_weekly (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    developer_id    UUID NOT NULL REFERENCES developer_profiles(id) ON DELETE CASCADE,
+    week_start      DATE NOT NULL,                           -- Monday of the week
+    total_hours     DECIMAL(6,2) DEFAULT 0,
+    billable_hours  DECIMAL(6,2) DEFAULT 0,
+    total_earnings  DECIMAL(12,2) DEFAULT 0,
+    projects_count  INTEGER DEFAULT 0,
+    UNIQUE(developer_id, week_start)
+);
+
+CREATE INDEX idx_time_summary_developer ON time_summary_weekly(developer_id, week_start DESC);
+
+-- Trigger to update time_entries updated_at
+CREATE TRIGGER trg_time_entry_updated
+    BEFORE UPDATE ON time_entries
+    FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+
+
+-- ============================================================
 -- BOOKMARKS / SAVED DEVELOPERS
 -- ============================================================
 
