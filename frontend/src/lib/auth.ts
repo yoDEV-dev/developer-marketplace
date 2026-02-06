@@ -6,12 +6,12 @@ import {
   decodeIdToken,
 } from "arctic";
 
-const issuer = process.env.OIDC_ISSUER!;
+const issuer = process.env.OAUTH_OIDC_ISSUER!;
 
 export const oidcClient = new OAuth2Client(
-  process.env.OIDC_CLIENT_ID!,
-  process.env.OIDC_CLIENT_SECRET!,
-  process.env.OIDC_REDIRECT_URI!,
+  process.env.OAUTH_OIDC_CLIENT_ID!,
+  process.env.OAUTH_OIDC_CLIENT_SECRET!,
+  process.env.OAUTH_OIDC_REDIRECT_URI!,
 );
 
 export const authorizationEndpoint = `${issuer}/authorize`;
