@@ -4,19 +4,26 @@ import { exchangeCode, decodeIDToken } from "@/lib/auth";
 import { createSession } from "@/lib/session";
 import { queryOne } from "@/lib/db";
 
+function getBaseUrl(request: NextRequest): string {
+  const proto = request.headers.get("x-forwarded-proto") || "https";
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "localhost";
+  return `${proto}://${host}`;
+}
+
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const error = url.searchParams.get("error");
+  const baseUrl = getBaseUrl(request);
 
   if (error) {
     console.error("OIDC error:", error, url.searchParams.get("error_description"));
-    return NextResponse.redirect(new URL("/en/developers", request.url));
+    return NextResponse.redirect(new URL("/en/developers", baseUrl));
   }
 
   if (!code || !state) {
-    return NextResponse.redirect(new URL("/en/developers", request.url));
+    return NextResponse.redirect(new URL("/en/developers", baseUrl));
   }
 
   const cookieStore = await cookies();
@@ -29,7 +36,7 @@ export async function GET(request: NextRequest) {
 
   if (!storedState || state !== storedState || !codeVerifier) {
     console.error("OIDC state mismatch or missing code verifier");
-    return NextResponse.redirect(new URL("/en/developers", request.url));
+    return NextResponse.redirect(new URL("/en/developers", baseUrl));
   }
 
   try {
@@ -67,9 +74,9 @@ export async function GET(request: NextRequest) {
       picture: user.picture || "",
     });
 
-    return NextResponse.redirect(new URL("/en/dashboard", request.url));
+    return NextResponse.redirect(new URL("/en/dashboard", baseUrl));
   } catch (err) {
     console.error("OIDC callback error:", err);
-    return NextResponse.redirect(new URL("/en/developers", request.url));
+    return NextResponse.redirect(new URL("/en/developers", baseUrl));
   }
 }
