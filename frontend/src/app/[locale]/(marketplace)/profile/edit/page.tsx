@@ -3,15 +3,17 @@ import { requireSession } from "@/lib/session";
 import {
   getEditableProfile,
   getProfileSkills,
+  getProfileAiTools,
   getProfilePricingModels,
   getProfilePaymentMethods,
 } from "@/repositories/profile";
-import { getTechTags, getCountries, getCurrencies } from "@/repositories/lookups";
+import { getTechTags, getCountries, getCurrencies, getAiTools } from "@/repositories/lookups";
 import { BasicInfoForm } from "@/components/profile/edit/BasicInfoForm";
 import { PricingForm } from "@/components/profile/edit/PricingForm";
 import { WorkPreferencesForm } from "@/components/profile/edit/WorkPreferencesForm";
 import { SocialLinksForm } from "@/components/profile/edit/SocialLinksForm";
 import { SkillsForm } from "@/components/profile/edit/SkillsForm";
+import { AiToolsForm } from "@/components/profile/edit/AiToolsForm";
 import { PublishToggle } from "@/components/profile/edit/PublishToggle";
 import { PhotoUpload } from "@/components/profile/edit/PhotoUpload";
 
@@ -40,15 +42,17 @@ export default async function ProfileEditPage() {
     );
   }
 
-  const [profile, skills, pricingModels, paymentMethods, techTags, countries, currencies] =
+  const [profile, skills, profileAiTools, pricingModels, paymentMethods, techTags, countries, currencies, allAiTools] =
     await Promise.all([
       getEditableProfile(session.profileId),
       getProfileSkills(session.profileId),
+      getProfileAiTools(session.profileId),
       getProfilePricingModels(session.profileId),
       getProfilePaymentMethods(session.profileId),
       getTechTags(),
       getCountries(),
       getCurrencies(),
+      getAiTools(),
     ]);
 
   if (!profile) {
@@ -101,6 +105,12 @@ export default async function ProfileEditPage() {
         <SkillsForm
           currentSkills={skills}
           techTags={techTags}
+        />
+
+        {/* AI Tools */}
+        <AiToolsForm
+          currentAiTools={profileAiTools}
+          aiTools={allAiTools}
         />
 
         {/* Pricing */}

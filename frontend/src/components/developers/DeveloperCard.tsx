@@ -18,6 +18,7 @@ export interface DeveloperCardProps {
   hourlyRateMax?: number;
   availability: "available" | "limited" | "booked" | "not_taking_work";
   skills: string[];
+  aiToolNames?: string[];
   isFavorite?: boolean;
 }
 
@@ -64,6 +65,7 @@ export function DeveloperCard({
   hourlyRateMax,
   availability,
   skills,
+  aiToolNames = [],
   isFavorite = false,
 }: DeveloperCardProps) {
   const locale = useLocale();
@@ -172,6 +174,15 @@ export function DeveloperCard({
             </span>
           )}
         </div>
+
+        {/* AI Tools */}
+        {aiToolNames.length > 0 && (
+          <div className="flex items-center gap-1.5 text-xs text-muted">
+            <span className="material-symbols-outlined text-sm">smart_toy</span>
+            <span>{aiToolNames.slice(0, 3).join(", ")}</span>
+            {aiToolNames.length > 3 && <span>+{aiToolNames.length - 3}</span>}
+          </div>
+        )}
 
         {/* Divider */}
         <div className="h-px w-full bg-border-light" />

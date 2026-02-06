@@ -155,6 +155,7 @@ export default async function DevelopersPage({ searchParams }: PageProps) {
           : undefined,
         availability: dev.availability_status as DeveloperCardProps["availability"],
         skills: dev.skills,
+        aiToolNames: dev.ai_tool_names,
       }));
     } catch (err) {
       console.error("Failed to fetch developers from DB, using mock data:", err);

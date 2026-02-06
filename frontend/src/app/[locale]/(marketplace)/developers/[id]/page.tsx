@@ -4,6 +4,7 @@ import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import { AboutSection } from "@/components/profile/AboutSection";
 import { SkillsSection } from "@/components/profile/SkillsSection";
+import { AiToolsSection } from "@/components/profile/AiToolsSection";
 import { PortfolioSection } from "@/components/profile/PortfolioSection";
 import { ReviewsSection } from "@/components/profile/ReviewsSection";
 import { PricingSection } from "@/components/profile/PricingSection";
@@ -160,6 +161,13 @@ When I'm not coding, you'll find me contributing to open source projects or ment
       verified: true,
     },
   ],
+  aiTools: [
+    { name: "GitHub Copilot", category: "Code Assistant", expertise_level: "building_with" },
+    { name: "Claude", category: "Chat / Assistant", expertise_level: "building_with" },
+    { name: "Cursor", category: "Code Assistant", expertise_level: "power_user" },
+    { name: "ChatGPT", category: "Chat / Assistant", expertise_level: "daily_user" },
+    { name: "v0", category: "Design / UI", expertise_level: "daily_user" },
+  ],
   pricing: {
     hourlyRate: { min: 45, max: 70 },
     projectMinimum: 2000,
@@ -208,6 +216,8 @@ export default async function DeveloperProfilePage({
               />
 
               <SkillsSection skills={developer.skills} />
+
+              <AiToolsSection aiTools={developer.aiTools} />
 
               <PortfolioSection projects={developer.portfolio} />
 

@@ -130,7 +130,19 @@ export type BasicInfoInput = z.infer<typeof basicInfoSchema>;
 export type PricingInput = z.infer<typeof pricingSchema>;
 export type WorkPreferencesInput = z.infer<typeof workPreferencesSchema>;
 export type SocialLinksInput = z.infer<typeof socialLinksSchema>;
+export const aiToolsSchema = z.object({
+  aiTools: z
+    .array(
+      z.object({
+        aiToolId: z.string().uuid(),
+        expertiseLevel: z.enum(["beginner", "daily_user", "power_user", "building_with"]),
+      }),
+    )
+    .max(20),
+});
+
 export type SkillsInput = z.infer<typeof skillsSchema>;
+export type AiToolsInput = z.infer<typeof aiToolsSchema>;
 export type LatamInput = z.infer<typeof latamSchema>;
 export type InquiryInput = z.infer<typeof inquirySchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;

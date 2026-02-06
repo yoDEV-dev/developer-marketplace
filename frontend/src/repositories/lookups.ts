@@ -70,3 +70,15 @@ export async function getCountries(): Promise<Country[]> {
     "SELECT code, name, flag_emoji, region, is_latam FROM countries ORDER BY is_latam DESC, name",
   );
 }
+
+export interface AiTool {
+  id: string;
+  name: string;
+  category: string | null;
+}
+
+export async function getAiTools(): Promise<AiTool[]> {
+  return query<AiTool>(
+    "SELECT id, name, category FROM ai_tools WHERE is_active = true ORDER BY display_order, name",
+  );
+}

@@ -94,7 +94,11 @@
     "paymentProtection": "Protección de Pago",
     "support": "Soporte",
     "supportAvailable": "Disponible 24/7",
-    "idVerified": "Identidad Verificada"
+    "idVerified": "Identidad Verificada",
+    "aiTools": "Herramientas de IA",
+    "buildingWith": "Construyendo Con",
+    "powerUser": "Usuario Avanzado",
+    "dailyUser": "Usuario Diario"
   },
   "reviews": {
     "title": "Calificaciones y Reseñas",

@@ -9,6 +9,7 @@ import {
   workPreferencesSchema,
   socialLinksSchema,
   skillsSchema,
+  aiToolsSchema,
   latamSchema,
 } from "@/lib/validation";
 
@@ -284,6 +285,55 @@ export async function updateSkills(
     await client.query("ROLLBACK");
     console.error("updateSkills error:", err);
     return { success: false, error: "Failed to update skills" };
+  } finally {
+    client.release();
+  }
+
+  revalidatePath("/[locale]/(marketplace)/profile/edit", "page");
+  return { success: true };
+}
+
+// ── AI Tools ──────────────────────────────────────────────
+
+export async function updateAiTools(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await requireSession();
+
+  const rawTools = formData.get("aiTools");
+  let toolsData: { aiToolId: string; expertiseLevel: string }[];
+  try {
+    toolsData = JSON.parse(rawTools as string);
+  } catch {
+    return { success: false, error: "Invalid AI tools data" };
+  }
+
+  const parsed = aiToolsSchema.safeParse({ aiTools: toolsData });
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message };
+  }
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query(
+      "DELETE FROM developer_ai_tools WHERE developer_id = $1",
+      [session.profileId],
+    );
+    for (let i = 0; i < parsed.data.aiTools.length; i++) {
+      const tool = parsed.data.aiTools[i];
+      await client.query(
+        `INSERT INTO developer_ai_tools (developer_id, ai_tool_id, expertise_level, display_order)
+         VALUES ($1, $2, $3, $4)`,
+        [session.profileId, tool.aiToolId, tool.expertiseLevel, i],
+      );
+    }
+    await client.query("COMMIT");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("updateAiTools error:", err);
+    return { success: false, error: "Failed to update AI tools" };
   } finally {
     client.release();
   }

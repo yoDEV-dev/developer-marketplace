@@ -80,6 +80,26 @@ export async function getProfileSkills(
   );
 }
 
+export interface ProfileAiTool {
+  ai_tool_id: string;
+  ai_tool_name: string;
+  category: string | null;
+  expertise_level: string;
+}
+
+export async function getProfileAiTools(
+  profileId: string,
+): Promise<ProfileAiTool[]> {
+  return query<ProfileAiTool>(
+    `SELECT dat.ai_tool_id, at.name as ai_tool_name, at.category, dat.expertise_level
+     FROM developer_ai_tools dat
+     JOIN ai_tools at ON dat.ai_tool_id = at.id
+     WHERE dat.developer_id = $1
+     ORDER BY dat.display_order ASC`,
+    [profileId],
+  );
+}
+
 export async function getProfilePricingModels(
   profileId: string,
 ): Promise<string[]> {

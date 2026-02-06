@@ -94,7 +94,11 @@
     "paymentProtection": "Payment Protection",
     "support": "Support",
     "supportAvailable": "24/7 Available",
-    "idVerified": "ID Verified"
+    "idVerified": "ID Verified",
+    "aiTools": "AI Tools",
+    "buildingWith": "Building With",
+    "powerUser": "Power User",
+    "dailyUser": "Daily User"
   },
   "reviews": {
     "title": "Ratings & Reviews",

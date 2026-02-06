@@ -31,6 +31,7 @@ export interface DeveloperListItem {
   country_name: string | null;
   flag_emoji: string | null;
   skills: string[];
+  ai_tool_names: string[];
 }
 
 export interface DeveloperProfile {
@@ -87,6 +88,13 @@ export interface DeveloperProfile {
   reviews: DeveloperReview[];
   pricing_models: string[];
   payment_methods: string[];
+  ai_tools: DeveloperAiToolItem[];
+}
+
+export interface DeveloperAiToolItem {
+  name: string;
+  category: string | null;
+  expertise_level: string;
 }
 
 export interface DeveloperSkill {
@@ -263,24 +271,38 @@ export async function searchDevelopers(filters: DeveloperSearchFilters) {
     [...params, limit, offset],
   );
 
-  // Batch fetch skills for returned developers
+  // Batch fetch skills and AI tools for returned developers
   const devIds = rows.map((r) => r.id);
   let skillsMap: Record<string, string[]> = {};
+  let aiToolsMap: Record<string, string[]> = {};
 
   if (devIds.length > 0) {
-    const skills = await query<{ developer_id: string; name: string }>(
-      `SELECT ds.developer_id, tt.name
-       FROM developer_skills ds
-       JOIN tech_tags tt ON ds.tech_tag_id = tt.id
-       WHERE ds.developer_id = ANY($1)
-       ORDER BY ds.skill_level ASC, ds.display_order ASC`,
-      [devIds],
-    );
+    const [skills, aiToolRows] = await Promise.all([
+      query<{ developer_id: string; name: string }>(
+        `SELECT ds.developer_id, tt.name
+         FROM developer_skills ds
+         JOIN tech_tags tt ON ds.tech_tag_id = tt.id
+         WHERE ds.developer_id = ANY($1)
+         ORDER BY ds.skill_level ASC, ds.display_order ASC`,
+        [devIds],
+      ),
+      query<{ developer_id: string; name: string }>(
+        `SELECT dat.developer_id, at.name
+         FROM developer_ai_tools dat
+         JOIN ai_tools at ON dat.ai_tool_id = at.id
+         WHERE dat.developer_id = ANY($1)
+         ORDER BY dat.display_order ASC`,
+        [devIds],
+      ),
+    ]);
 
-    skillsMap = {};
     for (const s of skills) {
       if (!skillsMap[s.developer_id]) skillsMap[s.developer_id] = [];
       skillsMap[s.developer_id].push(s.name);
+    }
+    for (const t of aiToolRows) {
+      if (!aiToolsMap[t.developer_id]) aiToolsMap[t.developer_id] = [];
+      aiToolsMap[t.developer_id].push(t.name);
     }
   }
 
@@ -288,6 +310,7 @@ export async function searchDevelopers(filters: DeveloperSearchFilters) {
     developers: rows.map((dev) => ({
       ...dev,
       skills: skillsMap[dev.id] || [],
+      ai_tool_names: aiToolsMap[dev.id] || [],
     })),
     total: parseInt(countResult?.count || "0"),
   };
@@ -309,6 +332,7 @@ export async function getDeveloperById(
       | "reviews"
       | "pricing_models"
       | "payment_methods"
+      | "ai_tools"
       | "country_name"
       | "flag_emoji"
     > & { country_name: string | null; flag_emoji: string | null }
@@ -332,6 +356,7 @@ export async function getDeveloperById(
     reviews,
     pricingModels,
     paymentMethods,
+    aiTools,
   ] = await Promise.all([
     query<DeveloperSkill>(
       `SELECT tt.name, tt.category, ds.skill_level, ds.endorsement_count
@@ -391,6 +416,14 @@ export async function getDeveloperById(
       `SELECT method FROM developer_payment_methods WHERE developer_id = $1`,
       [id],
     ),
+    query<DeveloperAiToolItem>(
+      `SELECT at.name, at.category, dat.expertise_level
+       FROM developer_ai_tools dat
+       JOIN ai_tools at ON dat.ai_tool_id = at.id
+       WHERE dat.developer_id = $1
+       ORDER BY dat.display_order ASC`,
+      [id],
+    ),
   ]);
 
   // Fetch portfolio images and tech tags
@@ -441,5 +474,6 @@ export async function getDeveloperById(
     reviews,
     pricing_models: pricingModels.map((m) => m.model_type),
     payment_methods: paymentMethods.map((m) => m.method),
+    ai_tools: aiTools,
   };
 }

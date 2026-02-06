@@ -226,6 +226,35 @@ CREATE TABLE developer_regional_experience (
     PRIMARY KEY (developer_id, country_code)
 );
 
+-- ============================================================
+-- AI TOOLS
+-- ============================================================
+
+-- Master list of AI tools
+CREATE TABLE ai_tools (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name            VARCHAR(80) NOT NULL UNIQUE,         -- e.g. "GitHub Copilot", "Claude"
+    category        VARCHAR(40),                          -- e.g. "Code Assistant", "Chat", "Image", "Design"
+    icon_url        VARCHAR(500),
+    is_active       BOOLEAN DEFAULT TRUE,
+    display_order   INTEGER DEFAULT 0,
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Developer ↔ AI Tools with expertise level
+CREATE TABLE developer_ai_tools (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    developer_id    UUID NOT NULL REFERENCES developer_profiles(id) ON DELETE CASCADE,
+    ai_tool_id      UUID NOT NULL REFERENCES ai_tools(id) ON DELETE CASCADE,
+    expertise_level VARCHAR(20) NOT NULL DEFAULT 'daily_user',
+        -- 'beginner', 'daily_user', 'power_user', 'building_with'
+    display_order   INTEGER DEFAULT 0,
+    UNIQUE(developer_id, ai_tool_id)
+);
+
+CREATE INDEX idx_dev_ai_tools_developer ON developer_ai_tools(developer_id);
+
+
 -- Skill Endorsements
 CREATE TABLE skill_endorsements (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -816,3 +845,45 @@ INSERT INTO tech_tags (name, category) VALUES
     ('Shopify', 'E-commerce'),
     ('WordPress', 'CMS'),
     ('Webflow', 'No-Code');
+
+
+-- AI Tools seed data
+INSERT INTO ai_tools (name, category, display_order) VALUES
+    -- Code Assistants
+    ('GitHub Copilot', 'Code Assistant', 1),
+    ('Cursor', 'Code Assistant', 2),
+    ('Claude Code', 'Code Assistant', 3),
+    ('Windsurf', 'Code Assistant', 4),
+    ('Tabnine', 'Code Assistant', 5),
+    ('Amazon CodeWhisperer', 'Code Assistant', 6),
+    ('Codeium', 'Code Assistant', 7),
+
+    -- Chat / General
+    ('ChatGPT', 'Chat', 10),
+    ('Claude', 'Chat', 11),
+    ('Gemini', 'Chat', 12),
+    ('Perplexity', 'Chat', 13),
+    ('Grok', 'Chat', 14),
+
+    -- Image / Design
+    ('Midjourney', 'Image', 20),
+    ('DALL-E', 'Image', 21),
+    ('Stable Diffusion', 'Image', 22),
+    ('Adobe Firefly', 'Image', 23),
+
+    -- Design / Prototyping
+    ('v0', 'Design', 30),
+    ('Bolt', 'Design', 31),
+    ('Lovable', 'Design', 32),
+
+    -- DevOps / Infrastructure
+    ('Devin', 'DevOps', 40),
+
+    -- Data / ML
+    ('Hugging Face', 'ML Platform', 50),
+    ('Weights & Biases', 'ML Platform', 51),
+
+    -- Writing / Content
+    ('Jasper', 'Writing', 60),
+    ('Copy.ai', 'Writing', 61),
+    ('Grammarly AI', 'Writing', 62);
