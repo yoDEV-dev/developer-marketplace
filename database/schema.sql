@@ -75,7 +75,7 @@ CREATE TABLE countries (
 
 CREATE TABLE developer_profiles (
     id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id                 UUID NOT NULL UNIQUE,            -- FK to main yoDEV user table
+    user_id                 TEXT NOT NULL UNIQUE,             -- External auth provider subject ID
 
     -- Identity
     display_name            VARCHAR(60) NOT NULL,
