@@ -40,20 +40,20 @@ export function LanguageSelector() {
         aria-label="Select language"
       >
         <span className="text-lg">{localeFlags[locale]}</span>
-        <span className="hidden sm:inline text-text-secondary">{localeNames[locale]}</span>
-        <span className="material-symbols-outlined text-lg text-text-secondary">
+        <span className="hidden sm:inline text-muted">{localeNames[locale]}</span>
+        <span className="material-symbols-outlined text-lg text-muted">
           {isOpen ? "expand_less" : "expand_more"}
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1 py-1 bg-surface-card rounded-lg shadow-lg border border-border min-w-[160px] z-50">
+        <div className="absolute right-0 top-full mt-1 py-1 bg-surface rounded-lg shadow-lg border border-border min-w-[160px] z-50">
           {locales.map((loc) => (
             <button
               key={loc}
               onClick={() => handleLocaleChange(loc)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-elevated transition-colors ${
-                loc === locale ? "text-primary bg-primary/5" : "text-text-primary"
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-background-alt transition-colors ${
+                loc === locale ? "text-primary bg-primary/5" : "text-foreground"
               }`}
             >
               <span className="text-lg">{localeFlags[loc]}</span>
