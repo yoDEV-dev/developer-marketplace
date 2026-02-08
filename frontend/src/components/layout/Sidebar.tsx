@@ -41,9 +41,13 @@ export function Sidebar({ user, badges = {} }: SidebarProps) {
       {/* Logo */}
       <div className="flex items-center h-16 px-6 border-b border-border">
         <Link href={`/${locale}`} className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-white font-bold text-sm">yD</span>
-          </div>
+          <Image
+            src="https://market.yodev.dev/profiles/63e49b3c-b3b0-4e26-baa2-0d2e489091e8/photo-1770418107604.webp"
+            alt="yoDEV"
+            width={32}
+            height={32}
+            className="w-8 h-8 rounded-lg object-cover"
+          />
           <span className="text-lg font-bold text-foreground">yoDEV</span>
         </Link>
       </div>
